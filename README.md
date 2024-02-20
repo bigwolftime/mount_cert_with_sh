@@ -19,3 +19,6 @@ The entire processes need not be executed by flushing the Magisk/KernelSU module
 ## Last but not least
 
 The vast majority of the code is referenced from: [httptoolkit-server](https://github.com/httptoolkit/httptoolkit-server), it's a really great program.
+
+
+[https://github.com/httptoolkit/httptoolkit-server/blob/405ec0a4f165853ab0b90172710d4455559f4519/src/interceptors/android/adb-commands.ts#L256-L361](https://github.com/httptoolkit/httptoolkit-server/blob/405ec0a4f165853ab0b90172710d4455559f4519/src/interceptors/android/adb-commands.ts#L256-L361)
