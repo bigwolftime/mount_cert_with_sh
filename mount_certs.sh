@@ -1,5 +1,7 @@
 set -e # Fail on error
 
+echo "\n---\nInjecting certificate:"
+
 # Create a separate temp directory, to hold the current certificates
 # Without this, when we add the mount we can't read the current certs anymore.
 mkdir -p -m 700 /data/local/tmp/htk-ca-copy
@@ -23,6 +25,9 @@ cp /data/misc/user/0/cacerts-added/* /system/etc/security/cacerts/
 # Update the perms & selinux context labels, so everything is as readable as before
 chown root:root /system/etc/security/cacerts/*
 chmod 644 /system/etc/security/cacerts/*
+
+# set Android SELinux label on root ca-certs dir too.
+chcon u:object_r:system_file:s0 /system/etc/security/cacerts/
 chcon u:object_r:system_file:s0 /system/etc/security/cacerts/*
 
 echo 'System cacerts setup completed'
@@ -30,6 +35,9 @@ echo 'System cacerts setup completed'
 # Deal with the APEX overrides in Android 14+, which need injecting into each namespace:
 if [ -d "/apex/com.android.conscrypt/cacerts" ]; then
     echo 'Injecting certificates into APEX cacerts'
+
+    # we mount for the shell itself, for completeness and so we can see this when we check for correct installation on later runs
+    mount --bind /System/etc/security/cacerts /apex/com.android.conscrypt/cacerts
 
     # When the APEX manages cacerts, we need to mount them at that path too. We can't do
     # this globally as APEX mounts are namespaced per process, so we need to inject a
